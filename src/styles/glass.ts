@@ -7,10 +7,10 @@
 export const glassStyles = {
   // Camada mais sutil — badges, chips, elementos pequenos
   light: {
-    background: 'rgba(255,255,255,0.26)',
+    background: 'rgba(255,255,255,0.32)',
     backdropFilter: 'blur(18px) saturate(1.25)',
     WebkitBackdropFilter: 'blur(18px) saturate(1.25)',
-    border: '1px solid rgba(255,255,255,0.50)',
+    border: '1px solid rgba(255,255,255,0.60)',
     boxShadow:
       'inset 0 1px 0 rgba(255,255,255,0.70), 0 16px 48px rgba(15,23,42,0.07)',
   },

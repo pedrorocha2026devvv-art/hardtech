@@ -106,10 +106,16 @@ html {
 body {
   font-family: var(--font-body);
   min-height: 100vh;
+  min-height: 100svh; /* small viewport height — corrige barra de browser mobile */
   position: relative;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  /* Previne bounce/pull-to-refresh indesejado no iOS/Android */
+  overscroll-behavior-y: none;
+  /* Previne resize de fonte ao girar o device */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 /* Render optimization for below-the-fold sections */
@@ -191,6 +197,26 @@ body {
   .service-card-hover:hover .service-icon-wrap {
     transform: none !important;
     transition: none !important;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   TAP TARGETS — min 44×44px em todos os elementos interativos
+   Garante acesso fácil em telas touch sem zoom
+   ───────────────────────────────────────────── */
+@media (hover: none) and (pointer: coarse) {
+  a, button, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  /* Exceção: links de texto inline não precisam de altura mínima */
+  p a, li a {
+    min-height: unset;
+    min-width: unset;
+    display: inline;
   }
 }
 
@@ -304,10 +330,10 @@ section {
     backdrop-filter: blur(12px) saturate(1.15);
     -webkit-backdrop-filter: blur(12px) saturate(1.15);
   }
+  /* Remove acrylic panels on mobile — 2 composite layers eliminadas */
   .acrylic-panel-bg-1,
   .acrylic-panel-bg-2 {
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    display: none;
   }
 }
 
@@ -533,7 +559,13 @@ section {
   gap: 10px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch; /* momentum scrolling iOS */
   padding-bottom: 3px;
+  cursor: grab;
+}
+
+.hardtech-trust-mobile:active {
+  cursor: grabbing;
 }
 
 .hardtech-trust-mobile .hardtech-trust-card {
@@ -548,10 +580,10 @@ section {
   min-width: 218px;
   padding: 11px 13px;
   border-radius: 999px;
-  background: linear-gradient(165deg, rgba(255,255,255,0.86) 0%, rgba(255,255,255,0.58) 100%);
+  background: linear-gradient(165deg, rgba(255,255,255,0.78) 0%, rgba(255,255,255,0.55) 100%);
   backdrop-filter: blur(16px) saturate(1.28);
   -webkit-backdrop-filter: blur(16px) saturate(1.28);
-  border: 1px solid rgba(255,255,255,0.92);
+  border: 1px solid rgba(255,255,255,0.88);
   box-shadow: 0 14px 30px rgba(12,12,12,0.08), 0 2px 8px rgba(12,12,12,0.03), inset 0 1px 0 rgba(255,255,255,0.98), inset 0 -1px 2px rgba(0,0,0,0.02);
   position: relative;
   overflow: hidden;
@@ -669,6 +701,12 @@ section {
     display: none;
   }
 
+  /* Fade lateral no scroll mobile — mesmo premium do marquee desktop */
+  .hardtech-trust-mobile {
+    mask-image: linear-gradient(90deg, transparent 0%, #000 6%, #000 94%, transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 6%, #000 94%, transparent 100%);
+  }
+
   .hardtech-trust-card {
     min-width: 0;
     border-radius: 16px;
@@ -686,12 +724,17 @@ section {
     font-size: 12px;
     white-space: normal;
   }
+
+  /* CTA Final: blurs de alta intensidade escondidos no mobile */
+  .cta-blur-orb {
+    display: none !important;
+  }
 }
 
-/* Performance profile for constrained devices */
+/* Performance profile for constrained devices — acrylic panels already hidden on mobile via @media */
 .page-mobile-optimized .acrylic-panel-bg-1,
 .page-mobile-optimized .acrylic-panel-bg-2 {
-  opacity: 0.6;
+  display: none;
 }
 
 @media (max-width: 1024px), (prefers-reduced-motion: reduce) {
@@ -706,3 +749,54 @@ section {
   }
 }
 
+/* ─────────────────────────────────────────────
+   STATS STRIP — Marquee de autoridade de agência
+   ───────────────────────────────────────────── */
+@keyframes hardtech-stats-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(calc(-100% / 3)); }
+}
+
+/* Pause on hover */
+@media (hover: hover) and (pointer: fine) {
+  .hardtech-stats-track:hover {
+    animation-play-state: paused;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hardtech-stats-track {
+    animation: none !important;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   AWWWARDS POLISH FINAL — Micro-detalhes
+   ───────────────────────────────────────────── */
+
+/* Hover nos service cards: acento verde na borda superior */
+.service-card-hover:hover {
+  border-top-color: rgba(164, 247, 41, 0.28) !important;
+}
+
+/* Dot de status pulsando — animação suave */
+.status-dot-pulse {
+  animation: pulse-green 2.4s ease-in-out infinite;
+}
+
+/* Melhora contraste do scrollbar no mobile para usar a cor off-white */
+@media (max-width: 767px) {
+  ::-webkit-scrollbar {
+    width: 2px;
+    height: 2px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.12);
+  }
+}
+
+/* Selection com cor da marca */
+::selection {
+  background: rgba(164, 247, 41, 0.22);
+  color: #0A0A0A;
+}

@@ -4,15 +4,40 @@
     <head>
 
       <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+      <!-- Viewport: viewport-fit=cover ativa safe-area nos iPhones com notch -->
+      <!-- maximum-scale=1 evita zoom acidental em double-tap sem bloquear acessibilidade -->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
+
+      <!-- Theme color: Android Chrome colore a status bar com o verde da marca -->
+      <meta name="theme-color" content="#F7F8F2" media="(prefers-color-scheme: light)" />
+      <meta name="theme-color" content="#0A0A0A" media="(prefers-color-scheme: dark)" />
+
+      <!-- Apple PWA / Safari iOS -->
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+      <meta name="apple-mobile-web-app-title" content="HardTech" />
+      <meta name="mobile-web-app-capable" content="yes" />
+
+      <!-- SEO -->
       <title>Hardtech — Sites, Tráfego e Tecnologia para Empresas</title>
       <meta name="description" content="Criamos sites, landing pages, campanhas, sistemas e automações para empresas de Marília, Ourinhos e região gerarem mais autoridade, contatos e oportunidades comerciais." />
       <meta name="robots" content="index, follow" />
+
+      <!-- Open Graph — preview correto no WhatsApp e redes sociais -->
+      <meta property="og:type" content="website" />
+      <meta property="og:title" content="Hardtech — Sites, Tráfego e Tecnologia" />
+      <meta property="og:description" content="Presença digital, tráfego pago e sistemas para empresas que querem vender mais." />
+      <meta property="og:locale" content="pt_BR" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Hardtech — Sites, Tráfego e Tecnologia" />
+
+      <!-- Fonts — preconnect reduz latência -->
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-      <script type="module" crossorigin src="/assets/index-e19zoLjL.js"></script>
-      <link rel="stylesheet" crossorigin href="/assets/index-BFJZB8sX.css">
+      <script type="module" crossorigin src="/assets/index-BDjmCo_v.js"></script>
+      <link rel="stylesheet" crossorigin href="/assets/index-bKt4ixZC.css">
     </head>
 
     <body>

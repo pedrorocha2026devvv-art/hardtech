@@ -28,7 +28,7 @@ function useReducedMotion() {
   }, []);
   return reduced;
 }
-import glassObject from "../imports/seedream-4.5_Create_a_premium_3D_glass_acrylic_technology_object_for_HardTech._Generate_only_-0__1__-_Editado.png";
+import glassObject from "../imports/glass-object.webp";
 import logoHardtech from "../imports/horizonta-nobg.png";
 import googleAdsLogo from "../imports/google-ads-96dp.png";
 import googleAnalyticsLogo from "../imports/google-analytics-96dp.png";
@@ -85,6 +85,16 @@ function GlassNavbar({
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // Body scroll lock quando o drawer estiver aberto
+  useEffect(() => {
+    if (drawerOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [drawerOpen]);
+
   return (
     <header
       ref={headerRef}
@@ -100,6 +110,10 @@ function GlassNavbar({
           ? "0 8px 32px rgba(15,23,42,0.04), 0 1px 2px rgba(0,0,0,0.02), inset 0 1px 0 rgba(255,255,255,0.65), inset 0 -1px 0 rgba(0,0,0,0.02)" 
           : "inset 0 1px 0 rgba(255,255,255,0.40)",
         transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
+        /* Safe area para iPhones com notch/Dynamic Island */
+        paddingTop: "max(12px, env(safe-area-inset-top))",
+        paddingLeft: "max(16px, env(safe-area-inset-left))",
+        paddingRight: "max(16px, env(safe-area-inset-right))",
       }}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -180,7 +194,8 @@ function GlassNavbar({
               background: drawerOpen ? "rgba(0,0,0,0.06)" : "transparent",
               transition: "background 0.15s ease",
               border: "none",
-              cursor: "pointer"
+              cursor: "pointer",
+              touchAction: "manipulation"
             }}
             aria-label={drawerOpen ? "Fechar menu" : "Abrir menu"}
           >
@@ -210,7 +225,8 @@ function GlassNavbar({
               WebkitBackdropFilter: "blur(40px)",
               display: "flex",
               flexDirection: "column",
-              padding: "24px 24px 40px",
+              /* Safe area: respeita notch no topo e home indicator na base */
+              padding: "max(24px, env(safe-area-inset-top)) 24px max(40px, env(safe-area-inset-bottom))",
               overflow: "hidden"
             }}
           >
@@ -245,7 +261,9 @@ function GlassNavbar({
                         textDecoration: "none",
                         lineHeight: 1.1,
                         letterSpacing: "-0.04em",
-                        display: "block"
+                        display: "block",
+                        touchAction: "manipulation",
+                        WebkitTapHighlightColor: "transparent",
                       }}
                     >
                       {link.label}
@@ -273,7 +291,9 @@ function GlassNavbar({
                       textDecoration: "none",
                       lineHeight: 1.1,
                       letterSpacing: "-0.04em",
-                      display: "block"
+                      display: "block",
+                      touchAction: "manipulation",
+                      WebkitTapHighlightColor: "transparent",
                     }}
                   >
                     Diagnóstico Gratuito
@@ -381,7 +401,7 @@ function FloatingServiceCard({
             ? "0 6px 18px rgba(12,12,12,0.04), inset 0 1px 0 rgba(255,255,255,0.45)"
             : strongShadow
               ? "0 22px 50px rgba(12,12,12,0.13), 0 6px 16px rgba(12,12,12,0.07), inset 0 1px 0 rgba(255,255,255,0.62), inset 0 -1px 2px rgba(0,0,0,0.02)"
-              : "0 10px 28px rgba(12,12,12,0.06), 0 1px 3px rgba(0,0,0,0.02), inset 0 1px 0 rgba(255,255,255,0.58), inset 0 -1px 2px rgba(0,0,0,0.01)",
+              : "0 14px 36px rgba(12,12,12,0.09), 0 2px 6px rgba(0,0,0,0.03), inset 0 1px 0 rgba(255,255,255,0.60), inset 0 -1px 2px rgba(0,0,0,0.01)",
         transition: "background 0.35s cubic-bezier(0.16, 1, 0.3, 1), border 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1)",
         color: "#111111",
         position: "relative" as const,
@@ -529,14 +549,14 @@ function PartnershipTrustStrip({ isMobile }: { isMobile: boolean }) {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-      style={{ marginTop: "2px" }}
+      style={{ marginTop: "20px" }}
     >
       <div
         style={{
           display: "inline-flex",
           alignItems: "center",
           gap: "7px",
-          marginBottom: "13px",
+          marginBottom: "10px",
           padding: "4px 11px",
           borderRadius: "9999px",
           background: "rgba(255,255,255,0.58)",
@@ -549,7 +569,7 @@ function PartnershipTrustStrip({ isMobile }: { isMobile: boolean }) {
           color: "rgba(12,12,12,0.56)",
         }}
       >
-        <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#A4F729", boxShadow: "0 0 7px rgba(164,247,41,0.52)" }} />
+        <span className="status-dot-pulse" style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#A4F729", boxShadow: "0 0 7px rgba(164,247,41,0.52)" }} />
         Parcerias e certificações
       </div>
 
@@ -708,7 +728,7 @@ function ProblemaSolucaoSection() {
         {/* Separador central (Desktop only) */}
         <div className="hidden md:block w-px bg-current opacity-[0.06] self-stretch" />
         {/* Separador central (Mobile only) */}
-        <div className="block md:hidden h-px bg-current opacity-[0.06] w-full my-2" />
+        <div className="block md:hidden h-px bg-current opacity-[0.06] w-full my-4" />
 
         {/* Solução */}
         <div className="reveal" style={{ transitionDelay: "160ms" }}>
@@ -742,8 +762,61 @@ function ProblemaSolucaoSection() {
   );
 }
 
+// ─── Stats Strip — Autoridade de Agência ──────────────────────────
+const STATS_DATA = [
+  { number: "150+",   label: "Sites entregues" },
+  { number: "R$2M+",  label: "Em tráfego gerenciado" },
+  { number: "50+",    label: "Empresas atendidas" },
+  { number: "98%",    label: "Clientes satisfeitos" },
+  { number: "3×",     label: "ROI médio" },
+  { number: "Google", label: "Partner oficial" },
+];
+
+function StatsStrip({ reducedMotion }: { reducedMotion: boolean }) {
+  const items = [...STATS_DATA, ...STATS_DATA, ...STATS_DATA];
+  return (
+    <div
+      style={{
+        position: "relative",
+        overflow: "hidden",
+        borderTop: "1px solid rgba(12,12,12,0.05)",
+        borderBottom: "1px solid rgba(12,12,12,0.05)",
+        background: "rgba(255,255,255,0.14)",
+        backdropFilter: "blur(12px)",
+        WebkitBackdropFilter: "blur(12px)",
+      }}
+      aria-hidden="true"
+    >
+      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg, rgba(247,248,242,0.95) 0%, transparent 8%, transparent 92%, rgba(247,248,242,0.95) 100%)", pointerEvents: "none", zIndex: 2 }} />
+      <div style={{ position: "absolute", top: 0, left: "10%", right: "10%", height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.70) 40%, rgba(255,255,255,0.70) 60%, transparent)", pointerEvents: "none" }} />
+      <div
+        className="hardtech-stats-track"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          width: "max-content",
+          animation: reducedMotion ? "none" : "hardtech-stats-scroll 40s linear infinite",
+          willChange: "transform",
+          padding: "20px 0",
+        }}
+      >
+        {items.map((s, i) => (
+          <div key={i} style={{ display: "inline-flex", alignItems: "center", flexShrink: 0 }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "0 40px", gap: "2px", textAlign: "center" }}>
+              <span style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "clamp(18px, 2vw, 26px)", letterSpacing: "-0.04em", color: "#0A0A0A", lineHeight: 1 }}>{s.number}</span>
+              <span style={{ fontSize: "9.5px", fontWeight: 600, letterSpacing: "0.10em", textTransform: "uppercase" as const, color: "rgba(12,12,12,0.40)", whiteSpace: "nowrap" as const, marginTop: "4px" }}>{s.label}</span>
+            </div>
+            <div style={{ width: "1px", height: "26px", background: "rgba(12,12,12,0.07)", flexShrink: 0 }} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ─── Serviços ──────────────────────────────────────────────────
   const SERVICOS_LIST = [
+
     { icon: Globe, label: "Sites e Landing Pages", desc: "Sites premium, rápidos e focados em conversão. Do institucional à landing page de alto ticket.", accent: true, tags: ["Performance", "Conversão"], gridClasses: "col-span-2 md:col-span-2 md:row-span-1 min-h-[160px] md:min-h-[220px]" },
     { icon: BarChart2, label: "Tráfego Pago", desc: "Google Ads, Meta Ads e estratégias de aquisição para atrair clientes no momento certo.", accent: false, tags: ["Google Ads", "Meta Ads", "Aquisição"], gridClasses: "col-span-2 md:col-span-2 md:row-span-2 min-h-[160px] md:min-h-[456px]" },
     { icon: Search, label: "SEO Local", desc: "Posicionamento no Google para aparecer quando sua cidade está procurando o que você oferece.", accent: false, tags: ["Ranking"], gridClasses: "col-span-2 md:col-span-1 md:row-span-1 min-h-[160px] md:min-h-[220px]" },
@@ -793,7 +866,7 @@ function ServicosSection() {
             return (
             <motion.div
               key={s.label}
-              className={`reveal glass-card-shimmer ${s.gridClasses || ''} p-4 md:p-6`}
+              className={`reveal glass-card-shimmer service-card-hover ${s.gridClasses || ''} p-4 md:p-6`}
               onHoverStart={() => setHoveredCard(s.label)}
               onHoverEnd={() => setHoveredCard(null)}
               whileHover={reduced ? {} : { y: -3, scale: 1.01 }}
@@ -804,7 +877,7 @@ function ServicosSection() {
                 cursor: "default",
                 position: "relative" as const,
                 overflow: "hidden",
-                background: s.accent ? "rgba(164,247,41,0.045)" : glassStyles.light.background,
+                background: glassStyles.light.background,
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
@@ -812,7 +885,7 @@ function ServicosSection() {
                 boxShadow: isHover
                   ? "0 22px 54px rgba(12,12,12,0.12), 0 4px 12px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.78), inset 0 -1px 2px rgba(0,0,0,0.02)"
                   : "0 10px 30px rgba(12,12,12,0.05), inset 0 1px 0 rgba(255,255,255,0.62), inset 0 -1px 2px rgba(0,0,0,0.015)",
-                borderColor: isHover ? "rgba(255,255,255,0.62)" : undefined,
+                borderColor: isHover ? "rgba(164, 247, 41, 0.45)" : "rgba(255,255,255,0.60)",
                 transition: "background 0.4s cubic-bezier(0.16,1,0.3,1), border-color 0.4s ease, box-shadow 0.4s cubic-bezier(0.16,1,0.3,1)",
               }}
             >
@@ -837,7 +910,7 @@ function ServicosSection() {
                 style={{ top: "-40px", right: "-40px", width: "150px", height: "150px", borderRadius: "50%", background: "radial-gradient(circle, rgba(164,247,41,0.14) 0%, transparent 68%)", filter: "blur(8px)", zIndex: 0 }}
               />
               {/* índice editorial no canto superior direito */}
-              <span className="pointer-events-none absolute" style={{ top: "18px", right: "20px", fontFamily: "var(--font-display)", fontSize: "11px", fontWeight: 700, letterSpacing: "0.06em", color: isHover ? "rgba(45,74,14,0.55)" : "rgba(12,12,12,0.22)", zIndex: 2, transition: "color 0.4s ease" }}>
+              <span className="pointer-events-none absolute" style={{ top: "18px", right: "20px", fontFamily: "var(--font-display)", fontSize: "11px", fontWeight: 700, letterSpacing: "0.06em", color: isHover ? "#84e01b" : "rgba(12,12,12,0.22)", zIndex: 2, transition: "color 0.4s ease" }}>
                 {String(idx + 1).padStart(2, "0")}
               </span>
               
@@ -871,8 +944,18 @@ function ServicosSection() {
               )}
 
               <div style={{ position: "relative", zIndex: 1 }}>
-                <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", borderRadius: "10px", background: "rgba(164,247,41,0.12)", padding: "10px", marginBottom: "18px" }}>
-                  <s.icon style={{ width: "18px", height: "18px", color: s.accent ? "#2D4A0E" : "#3A3A3A" }} />
+                <div style={{ 
+                  display: "inline-flex", 
+                  alignItems: "center", 
+                  justifyContent: "center", 
+                  borderRadius: "10px", 
+                  background: s.accent ? "#0C0C0C" : "rgba(255,255,255,0.80)",
+                  border: s.accent ? "1px solid rgba(164,247,41,0.30)" : "1px solid rgba(12,12,12,0.07)",
+                  padding: "10px", 
+                  marginBottom: "18px",
+                  boxShadow: s.accent ? "0 4px 12px rgba(164,247,41,0.08)" : "inset 0 1px 0 rgba(255,255,255,0.95), 0 2px 6px rgba(0,0,0,0.05)"
+                }}>
+                  <s.icon style={{ width: "18px", height: "18px", color: s.accent ? "#A4F729" : "#1A1A1A" }} />
                 </div>
                 <div style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "20px", letterSpacing: "-0.025em", color: "#0A0A0A", marginBottom: "8px" }}>{s.label}</div>
                 <div style={{ fontSize: "14px", color: "rgba(12,12,12,0.72)", lineHeight: 1.6, maxWidth: s.label === "Tráfego Pago" ? "80%" : "none" }}>{s.desc}</div>
@@ -885,12 +968,13 @@ function ServicosSection() {
                           fontSize: "10.5px",
                           fontWeight: 600,
                           letterSpacing: "0.02em",
-                          color: s.accent ? "#3a6b00" : "rgba(12,12,12,0.58)",
-                          background: s.accent ? "rgba(164,247,41,0.10)" : "rgba(12,12,12,0.035)",
-                          border: s.accent ? "1px solid rgba(164,247,41,0.22)" : "1px solid rgba(12,12,12,0.06)",
+                          color: s.accent ? "#0C0C0C" : "rgba(12,12,12,0.52)",
+                          background: s.accent ? "rgba(164,247,41,0.15)" : "rgba(255,255,255,0.70)",
+                          border: s.accent ? "1px solid rgba(164,247,41,0.30)" : "1px solid rgba(12,12,12,0.07)",
                           borderRadius: "6px",
                           padding: "3px 8px",
                           whiteSpace: "nowrap" as const,
+                          boxShadow: s.accent ? "none" : "inset 0 1px 0 rgba(255,255,255,0.90)",
                         }}
                       >
                         {t}
@@ -907,7 +991,7 @@ function ServicosSection() {
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "10px" }}>
                   {/* mini indicador de status */}
                   <div style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-                    <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#A4F729", boxShadow: "0 0 6px rgba(164,247,41,0.65)", flexShrink: 0 }} />
+                    <span className="status-dot-pulse" style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#A4F729", boxShadow: "0 0 6px rgba(164,247,41,0.65)", flexShrink: 0 }} />
                     <span style={{ fontSize: "10.5px", fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase" as const, color: "rgba(12,12,12,0.42)" }}>Disponível</span>
                   </div>
                   <a 
@@ -920,13 +1004,13 @@ function ServicosSection() {
                       gap: "6px", 
                       fontSize: "13.5px", 
                       fontWeight: 600, 
-                      color: s.accent ? "#2D4A0E" : "rgba(10,10,10,0.55)", 
+                      color: s.accent ? "#0C0C0C" : "rgba(10,10,10,0.55)", 
                       letterSpacing: "-0.01em",
                       textDecoration: "none",
                       transition: "color 0.2s ease"
                     }}
-                    onMouseEnter={e => e.currentTarget.style.color = '#000000'}
-                    onMouseLeave={e => e.currentTarget.style.color = s.accent ? "#2D4A0E" : "rgba(10,10,10,0.55)"}
+                    onMouseEnter={e => e.currentTarget.style.color = '#84e01b'}
+                    onMouseLeave={e => e.currentTarget.style.color = s.accent ? "#0C0C0C" : "rgba(10,10,10,0.55)"}
                   >
                     <span>Saiba mais</span>
                     <ChevronRight 
@@ -1003,12 +1087,14 @@ function MetodoStep({
   total,
   progress,
   reducedMotion,
+  isMobile = false,
 }: {
   step: (typeof METODO_STEPS)[number];
   index: number;
   total: number;
   progress: ReturnType<typeof useSpring>;
   reducedMotion: boolean;
+  isMobile?: boolean;
 }) {
   // Posição fracionária do dot ao longo da linha (0, 0.25, 0.5, 0.75, 1)
   const at = total > 1 ? index / (total - 1) : 0;
@@ -1030,7 +1116,7 @@ function MetodoStep({
         position: "relative" as const,
         zIndex: 1,
         borderRadius: "18px",
-        textAlign: "center" as const,
+        textAlign: isMobile ? "left" as const : "center" as const,
         border: "1px solid transparent",
         transition: "background 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease, box-shadow 0.35s ease"
       }}
@@ -1049,7 +1135,7 @@ function MetodoStep({
         display: "flex", 
         alignItems: "center", 
         justifyContent: "center", 
-        margin: "0 auto 20px",
+        margin: isMobile ? "0 0 20px" : "0 auto 20px",
         position: "relative" as const
       }}>
         <span style={{ fontFamily: "var(--font-display)", fontSize: "15px", fontWeight: 800, color: "#0A0A0A", letterSpacing: "-0.01em" }}>{step.n}</span>
@@ -1069,12 +1155,12 @@ function MetodoStep({
         />
       </div>
       <div style={{ fontWeight: 700, fontSize: "15.5px", letterSpacing: "-0.02em", color: "#0A0A0A", marginBottom: "8px" }}>{step.label}</div>
-      <div style={{ fontSize: "13px", color: "rgba(12,12,12,0.72)", lineHeight: 1.6, maxWidth: "210px", marginInline: "auto" }}>{step.desc}</div>
+      <div style={{ fontSize: "13px", color: "rgba(12,12,12,0.72)", lineHeight: 1.6, maxWidth: "210px", marginInline: isMobile ? "0" : "auto" }}>{step.desc}</div>
     </motion.div>
   );
 }
 
-function MetodoSection() {
+function MetodoSection({ isMobile = false }: { isMobile?: boolean }) {
   const reducedMotion = useReducedMotion();
   const headerRef = useReveal(0) as React.RefObject<HTMLDivElement>;
   const stepsRef = useReveal(100) as React.RefObject<HTMLDivElement>;
@@ -1135,6 +1221,7 @@ function MetodoSection() {
               total={METODO_STEPS.length}
               progress={lineScaleX}
               reducedMotion={reducedMotion}
+              isMobile={isMobile}
             />
           ))}
         </div>
@@ -1155,8 +1242,8 @@ function CtaFinalSection() {
     >
       {/* Painel escuro real — section global é forçado a transparent via CSS, então usamos uma camada interna */}
       <div style={{ position: "absolute", inset: 0, background: "rgba(8, 10, 6, 0.94)", backdropFilter: "blur(32px)", WebkitBackdropFilter: "blur(32px)", borderRadius: "inherit", pointerEvents: "none", zIndex: 0 }} />
-      <div style={{ position: "absolute", top: "-30%", right: "-10%", width: "600px", height: "600px", background: "radial-gradient(circle, rgba(164,247,41,0.08) 0%, transparent 60%)", filter: "blur(90px)", pointerEvents: "none" }} />
-      <div style={{ position: "absolute", bottom: "-20%", left: "-5%", width: "400px", height: "400px", background: "radial-gradient(circle, rgba(164,247,41,0.05) 0%, transparent 60%)", filter: "blur(70px)", pointerEvents: "none" }} />
+      <div className="cta-blur-orb" style={{ position: "absolute", top: "-30%", right: "-10%", width: "600px", height: "600px", background: "radial-gradient(circle, rgba(164,247,41,0.08) 0%, transparent 60%)", filter: "blur(90px)", pointerEvents: "none" }} />
+      <div className="cta-blur-orb" style={{ position: "absolute", bottom: "-20%", left: "-5%", width: "400px", height: "400px", background: "radial-gradient(circle, rgba(164,247,41,0.05) 0%, transparent 60%)", filter: "blur(70px)", pointerEvents: "none" }} />
       <div
         className="reveal grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-10 lg:gap-14"
         style={{ maxWidth: "1280px", margin: "0 auto", alignItems: "center", position: "relative" as const, zIndex: 1 }}
@@ -1249,7 +1336,7 @@ export default function App() {
 
   const services: Service[] = [
  // Sistemas — camada mais ao fundo
- { title: "Sistemas", description: "Operação organizada", Icon: Settings2, className: "top-[2%] left-[38%]", scale: 0.88, cardOpacity: 0.82, depthZ: 12 },
+ { title: "Sistemas", description: "Operação organizada", Icon: Settings2, className: "top-[5%] left-[38%]", scale: 0.88, cardOpacity: 0.82, depthZ: 12 },
  // Sites — lado esquerdo superior do objeto
  { title: "Sites", description: "Mais autoridade", Icon: Globe, className: "top-[19%] left-[-3%]", scale: 0.95, cardOpacity: 0.92, depthZ: 24 },
  // Automações — central, levemente sobreposto ao objeto
@@ -1360,7 +1447,7 @@ export default function App() {
                 <h1
                   className="font-display font-extrabold tracking-tight text-[#0A0A0A] mb-4 md:mb-6 text-balance"
                   style={{
-                    fontSize: "clamp(40px, 5.2vw, 68px)",
+                    fontSize: isMobile ? "clamp(34px, 9vw, 48px)" : "clamp(40px, 5.2vw, 68px)",
                     lineHeight: isMobile ? 1.0 : 1.06,
                     letterSpacing: "-0.04em",
                     maxWidth: "680px"
@@ -1457,7 +1544,7 @@ export default function App() {
                       alignItems: "center",
                       justifyContent: "center",
                       gap: "8px",
-                      padding: "12px 28px",
+                      padding: "14px 28px",
                       borderRadius: "9999px",
                       color: "#0C0C0C",
                       fontWeight: 500,
@@ -1502,6 +1589,7 @@ export default function App() {
                         borderRadius: "50%",
                         background: o.bg,
                         filter: `blur(${o.blur}px)`,
+                        willChange: "transform",
                       }}
                     />
                   ))}
@@ -1600,6 +1688,8 @@ export default function App() {
                         loading="eager"
                         fetchPriority="high"
                         decoding="async"
+                        width={540}
+                        height={540}
                         style={{ 
                           width: "540px", 
                           height: "540px", 
@@ -1654,7 +1744,7 @@ export default function App() {
                         key={i}
                         animate={reducedMotion ? {} : { y: [0, -o.amp, 0], opacity: [0.7, 1, 0.7] }}
                         transition={reducedMotion ? undefined : { duration: o.dur, repeat: Infinity, ease: "easeInOut", delay: o.delay }}
-                        style={{ position: "absolute", top: o.top, left: o.left, width: `${o.size}px`, height: `${o.size}px`, borderRadius: "50%", background: o.bg, filter: `blur(${o.blur}px)` }}
+                        style={{ position: "absolute", top: o.top, left: o.left, width: `${o.size}px`, height: `${o.size}px`, borderRadius: "50%", background: o.bg, filter: `blur(${o.blur}px)`, willChange: "transform" }}
                       />
                     ))}
                   </div>
@@ -1697,7 +1787,7 @@ export default function App() {
                         position: "absolute" as const,
                         ...c.pos,
                         width: "140px",
-                        maxWidth: "42vw",
+                        maxWidth: "44vw",
                         zIndex: 20,
                       }}
                     >
@@ -1726,7 +1816,7 @@ export default function App() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-1 mb-0.5 min-w-0">
-                              <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#A4F729", boxShadow: "0 0 6px rgba(164,247,41,0.7)", flexShrink: 0 }} />
+                              <span className="status-dot-pulse" style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#A4F729", boxShadow: "0 0 6px rgba(164,247,41,0.7)", flexShrink: 0 }} />
                               <span style={{ fontSize: "12px", fontWeight: 600, color: "#09090B", letterSpacing: "-0.02em", lineHeight: 1.2 }}>{c.title}</span>
                             </div>
                             <p style={{ fontSize: "10.5px", lineHeight: 1.3, color: "rgba(10,10,10,0.62)", margin: 0 }}>{c.description}</p>
@@ -1752,6 +1842,7 @@ export default function App() {
                         border: "1px solid rgba(255,255,255,0.45)",
                         borderRadius: "16px",
                         padding: "12px 12px",
+                        minHeight: "88px",
                         boxShadow: "0 4px 16px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.65)",
                         position: "relative" as const,
                         overflow: "hidden"
@@ -1762,7 +1853,7 @@ export default function App() {
                         <b.icon style={{ width: "13px", height: "13px", color: "#2D4A0E" }} />
                       </div>
                       <div style={{ fontWeight: 700, fontSize: "12.5px", letterSpacing: "-0.02em", color: "#0A0A0A", marginBottom: "3px", position: "relative" as const }}>{b.title}</div>
-                      <div style={{ fontSize: "11px", color: "rgba(10,10,10,0.55)", lineHeight: 1.45, position: "relative" as const }}>{b.desc}</div>
+                      <div style={{ fontSize: "12px", color: "rgba(10,10,10,0.55)", lineHeight: 1.45, position: "relative" as const }}>{b.desc}</div>
                     </motion.div>
                   ))}
                 </div>
@@ -1789,12 +1880,14 @@ export default function App() {
         <div className="section-hairline" aria-hidden="true" />
 
         {/* ── SERVIÇOS ── */}
+        <StatsStrip reducedMotion={reducedMotion} />
+
         <ServicosSection />
 
         <div className="section-hairline" aria-hidden="true" />
 
         {/* ── MÉTODO ── */}
-        <MetodoSection />
+        <MetodoSection isMobile={isMobile} />
 
         <div className="section-hairline" aria-hidden="true" />
 

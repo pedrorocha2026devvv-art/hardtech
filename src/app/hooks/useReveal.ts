@@ -8,7 +8,7 @@ import { useEffect, useRef } from "react";
  * @param staggerMs  - delay between sibling reveals in ms (default 80)
  * @param threshold  - intersection ratio to trigger (default 0.12)
  */
-export function useReveal(staggerMs = 80, threshold = 0.12) {
+export function useReveal(staggerMs = 80, threshold = 0.08) {
   const ref = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
