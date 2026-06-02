@@ -1,0 +1,29 @@
+/* ─── Reveal animations ───────────────────────────────────────────
+   Uses .reveal + .revealed classes driven by IntersectionObserver.
+   Respects prefers-reduced-motion: no animation when active.
+──────────────────────────────────────────────────────────────── */
+
+/* Base state — hidden before intersection */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity  0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+/* Revealed state — element is in view */
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Honour prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

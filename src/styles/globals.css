@@ -1,0 +1,708 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Syne:wght@400..800&display=swap');
+
+:root {
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --accent: #A4F729;
+  --accent-hover: #B8FC45;
+  --accent-text: #0C2200;
+  --glass-light: rgba(255, 255, 255, 0.28);
+  --glass-medium: rgba(255, 255, 255, 0.42);
+  --glass-border: rgba(255, 255, 255, 0.42);
+  --glass-border-dark: rgba(10, 10, 10, 0.06);
+  --glass-shadow: 0 18px 50px rgba(15, 23, 42, 0.07), inset 0 1px 0 rgba(255,255,255,0.55);
+  --radius-card: 18px;
+  --radius-pill: 9999px;
+  --blur-md: blur(20px);
+  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Restore default browser cursor */
+/*
+* {
+  cursor: none !important;
+}
+*/
+
+html, body {
+  font-family: var(--font-body);
+  height: 100%;
+  margin: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#root {
+  height: 100%;
+}
+
+::selection {
+  background: rgba(12, 12, 12, 0.12);
+  color: #0A0A0A;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.04);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.18);
+  border-radius: 3px;
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.18) rgba(0, 0, 0, 0.04);
+}
+
+*:focus-visible {
+  outline: 2px solid rgba(164, 247, 41, 0.65);
+  outline-offset: 3px;
+}
+
+.hardtech-hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.hardtech-hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hardtech-btn-ghost:hover {
+  background: rgba(10, 10, 10, 0.04);
+  border-color: rgba(10, 10, 10, 0.18);
+}
+
+/* ─────────────────────────────────────────────
+   BACKGROUND BASE
+   O fundo atmosférico real é gerado pelo componente
+   AtmosphericBackground em App.tsx (fixed, z-index:-10).
+   O body só precisa de uma cor de fallback compatível.
+   ───────────────────────────────────────────── */
+html, body {
+  font-family: var(--font-body);
+  background: #F7F8F2;
+  overflow-x: hidden;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 130px; /* Space for fixed header on desktop anchor scroll */
+}
+
+@media (max-width: 767px) {
+  html {
+    scroll-padding-top: 96px; /* Space for fixed header on mobile anchor scroll */
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  font-family: var(--font-body);
+  min-height: 100vh;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Render optimization for below-the-fold sections */
+.deferred-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 900px;
+}
+
+/* ─────────────────────────────────────────────
+   PULSE VERDE — dot de status nos cards (Premium)
+   ───────────────────────────────────────────── */
+@keyframes pulse-green {
+  0%, 100% { 
+    box-shadow: 0 0 4px rgba(164, 247, 41, 0.50), 0 0 0 2px rgba(164, 247, 41, 0.15); 
+  }
+  50% { 
+    box-shadow: 0 0 10px rgba(164, 247, 41, 0.70), 0 0 0 4px rgba(164, 247, 41, 0.10); 
+  }
+}
+
+/* ─────────────────────────────────────────────
+   SCROLL REVEAL
+   ───────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal.revealed {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   MICROINTERAÇÕES — botões (seta + feedback tátil)
+   ───────────────────────────────────────────── */
+.cta-group .cta-arrow {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.cta-group:hover .cta-arrow {
+  transform: translateX(4px);
+}
+.cta-group:active {
+  transform: scale(0.97);
+}
+
+/* Acento verde suave no ícone dos cards de serviço */
+.service-icon-wrap {
+  transition: 
+    background 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.service-card-hover:hover .service-icon-wrap {
+  background: rgba(164, 247, 41, 0.16);
+  box-shadow: 0 0 0 1px rgba(164, 247, 41, 0.30), 0 4px 12px rgba(164, 247, 41, 0.15);
+  transform: translateY(-1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta-group .cta-arrow,
+  .cta-group:hover .cta-arrow,
+  .cta-group:active,
+  .service-icon-wrap,
+  .service-card-hover:hover .service-icon-wrap {
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   FALLBACK — navegadores sem backdrop-filter
+   ───────────────────────────────────────────── */
+@supports not (backdrop-filter: blur(1px)) {
+  .glass-hero,
+  .glass-card,
+  .glass-navbar,
+  .glass-features {
+    background: rgba(232, 237, 227, 0.94) !important;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   LINHA DE VIDRO — separador horizontal padrão
+   ───────────────────────────────────────────── */
+.glass-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.75) 20%,
+    rgba(255,255,255,0.75) 80%,
+    transparent
+  );
+}
+
+/* ─────────────────────────────────────────────
+   HIGHLIGHT GLASS — brilho interno no topo
+   Aplicar em qualquer elemento glass como ::before
+   ───────────────────────────────────────────── */
+.glass-highlight::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.95),
+    transparent
+  );
+  pointer-events: none;
+}
+
+section {
+  background: transparent !important;
+}
+
+.glass-hero {
+  isolation: isolate;
+}
+
+/* ─────────────────────────────────────────────
+   PAGE LAYOUT & REFERENCE GLASSMOPHISM SYSTEM
+   ───────────────────────────────────────────── */
+.page {
+  position: relative;
+  min-height: 100vh;
+  background-color: #F7F8F2;
+  background-image: url('../imports/bg2.png');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+}
+
+.page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    /* Layer 0: Vinheta suave nas bordas — dá profundidade e foco ao centro */
+    radial-gradient(ellipse 120% 90% at 50% 40%, transparent 58%, rgba(20,28,14,0.05) 100%),
+    /* Layer 1: Halo verde ambiente muito suave à direita (Hero) */
+    radial-gradient(circle at 82% 22%, rgba(164,247,41,0.05) 0%, transparent 42%),
+    /* Layer 2: Halo verde ambiente muito suave abaixo à esquerda (Método) */
+    radial-gradient(circle at 14% 78%, rgba(164,247,41,0.03) 0%, transparent 38%),
+    /* Layer 3: Halo verde discreto no rodapé/CTA */
+    radial-gradient(circle at 78% 96%, rgba(164,247,41,0.025) 0%, transparent 34%),
+    /* Layer 4: Reflexos diagonais leves de luz (vidro) */
+    linear-gradient(135deg, rgba(255,255,255,0.14) 0%, transparent 34%, rgba(255,255,255,0.06) 52%, transparent 74%, rgba(255,255,255,0.12) 100%),
+    /* Layer 5: Base degradê de off-white quente */
+    radial-gradient(circle at 50% 0%, rgba(255,255,255,0.38) 0%, rgba(247,248,242,0.10) 72%);
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+  z-index: 0;
+}
+
+.page::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.24) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.18) 1px, transparent 1px);
+  background-size: 160px 160px;
+  opacity: 0.07;
+  z-index: 0;
+}
+
+/* Reduz custo de backdrop-filter e vinheta no mobile */
+@media (max-width: 767px) {
+  .page::before {
+    backdrop-filter: blur(12px) saturate(1.15);
+    -webkit-backdrop-filter: blur(12px) saturate(1.15);
+  }
+  .acrylic-panel-bg-1,
+  .acrylic-panel-bg-2 {
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+}
+
+/* Floating giant acrylic panels in background */
+.acrylic-panel-bg-1 {
+  position: fixed;
+  top: 12%;
+  left: -5%;
+  width: 45%;
+  height: 65%;
+  background: rgba(255, 255, 255, 0.015);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 40px;
+  pointer-events: none;
+  z-index: 0;
+  transform: rotate(-3deg);
+  box-shadow: 0 30px 100px rgba(0,0,0,0.01), inset 0 1px 0 rgba(255,255,255,0.3);
+}
+
+.acrylic-panel-bg-2 {
+  position: fixed;
+  bottom: 8%;
+  right: -8%;
+  width: 50%;
+  height: 55%;
+  background: rgba(255, 255, 255, 0.01);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 50px;
+  pointer-events: none;
+  z-index: 0;
+  transform: rotate(2deg);
+  box-shadow: 0 30px 100px rgba(0,0,0,0.01), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+
+.content {
+  position: relative;
+  z-index: 10;
+}
+
+.glass-card {
+  background: rgba(255,255,255,0.26);
+  backdrop-filter: blur(18px) saturate(1.25);
+  -webkit-backdrop-filter: blur(18px) saturate(1.25);
+  border: 1px solid rgba(255,255,255,0.50);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.70),
+    0 16px 48px rgba(15,23,42,0.07);
+}
+
+@media (max-width: 767px) {
+  .glass-card {
+    backdrop-filter: blur(12px) saturate(1.15);
+    -webkit-backdrop-filter: blur(12px) saturate(1.15);
+  }
+}
+
+/* ─────────────────────────────────────────────
+   SECTION DIVIDER — linha editorial entre seções
+   Hairline quase invisível, com brilho de vidro sutil
+   ───────────────────────────────────────────── */
+.section-hairline {
+  position: relative;
+  height: 1px;
+  margin: 0 16px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(10,10,10,0.05) 18%,
+    rgba(10,10,10,0.05) 82%,
+    transparent
+  );
+}
+.section-hairline::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateY(1px);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.55) 18%,
+    rgba(255,255,255,0.55) 82%,
+    transparent
+  );
+}
+
+/* ─────────────────────────────────────────────
+   AWWWARDS POLISH — Micro-interactions premium
+   ───────────────────────────────────────────── */
+
+/* Shimmer de borda em hover — brilho que percorre o vidro */
+@keyframes shimmer-border {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.glass-card-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.glass-card-shimmer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255,255,255,0) 35%,
+    rgba(255,255,255,0.70) 50%,
+    rgba(255,255,255,0) 65%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+.glass-card-shimmer:hover::before {
+  opacity: 1;
+  animation: shimmer-border 1.8s ease-in-out infinite;
+}
+
+/* Respeita prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .glass-card-shimmer::before {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+}
+
+/* Hover lift universal para cards */
+.hover-lift {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.08), 0 6px 16px rgba(0,0,0,0.04);
+}
+
+/* Hero trust strip: partnerships and certifications */
+.hardtech-trust-wrap {
+  position: relative;
+  padding: 8px 0 2px;
+}
+
+.hardtech-trust-wrap::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(12,12,12,0.07) 18%, rgba(12,12,12,0.07) 82%, transparent);
+}
+
+.hardtech-trust-wrap::after {
+  content: "";
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 1px;
+  height: 28px;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.78) 0%, transparent 74%);
+}
+
+.hardtech-trust-marquee {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  padding: 6px 0 4px;
+  mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+}
+
+.hardtech-trust-marquee::before,
+.hardtech-trust-marquee::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 44px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.hardtech-trust-marquee::before {
+  left: 0;
+  background: linear-gradient(90deg, rgba(247,248,242,0.95), rgba(247,248,242,0));
+}
+
+.hardtech-trust-marquee::after {
+  right: 0;
+  background: linear-gradient(270deg, rgba(247,248,242,0.95), rgba(247,248,242,0));
+}
+
+.hardtech-trust-track {
+  width: max-content;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: hardtech-marquee 60s linear infinite;
+  will-change: transform;
+}
+
+@keyframes hardtech-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(-50% - 6px)); }
+}
+
+.hardtech-trust-mobile {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 3px;
+}
+
+.hardtech-trust-mobile .hardtech-trust-card {
+  scroll-snap-align: start;
+  flex: 0 0 min(85%, 248px);
+}
+
+.hardtech-trust-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 218px;
+  padding: 11px 13px;
+  border-radius: 999px;
+  background: linear-gradient(165deg, rgba(255,255,255,0.86) 0%, rgba(255,255,255,0.58) 100%);
+  backdrop-filter: blur(16px) saturate(1.28);
+  -webkit-backdrop-filter: blur(16px) saturate(1.28);
+  border: 1px solid rgba(255,255,255,0.92);
+  box-shadow: 0 14px 30px rgba(12,12,12,0.08), 0 2px 8px rgba(12,12,12,0.03), inset 0 1px 0 rgba(255,255,255,0.98), inset 0 -1px 2px rgba(0,0,0,0.02);
+  position: relative;
+  overflow: hidden;
+  contain: layout paint;
+  transform: translateZ(0);
+  transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 260ms cubic-bezier(0.16, 1, 0.3, 1), border-color 220ms ease;
+}
+
+.hardtech-trust-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 14%;
+  right: 14%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.98), transparent);
+  pointer-events: none;
+}
+
+.hardtech-trust-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(255,255,255,0.26) 0%, transparent 46%);
+}
+
+.hardtech-trust-card:focus-visible {
+  outline: 2px solid rgba(164, 247, 41, 0.75);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hardtech-trust-card:hover {
+    transform: translateY(-1px);
+    border-color: rgba(255,255,255,0.99);
+    box-shadow: 0 18px 36px rgba(12,12,12,0.10), 0 3px 10px rgba(12,12,12,0.04), inset 0 1px 0 rgba(255,255,255,1), inset 0 -1px 2px rgba(0,0,0,0.02);
+  }
+
+  .hardtech-trust-marquee:hover .hardtech-trust-track {
+    animation-play-state: paused;
+  }
+}
+
+.hardtech-trust-icon {
+  width: 31px;
+  height: 31px;
+  border-radius: 9999px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.96);
+  border: 1px solid rgba(255,255,255,0.98);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 2px 6px rgba(0,0,0,0.08);
+  color: #0A0A0A;
+}
+
+.hardtech-trust-icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.hardtech-trust-icon img {
+  width: 19px;
+  height: 19px;
+  object-fit: contain;
+  filter: saturate(1.02) contrast(1.03);
+  image-rendering: -webkit-optimize-contrast;
+}
+
+.hardtech-trust-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.15;
+}
+
+.hardtech-trust-copy strong {
+  font-size: 13px;
+  color: #080808;
+  letter-spacing: -0.015em;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hardtech-trust-copy span {
+  font-size: 10.75px;
+  color: rgba(12,12,12,0.60);
+  letter-spacing: 0.01em;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.hardtech-trust-copy span::before {
+  content: "";
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(164,247,41,0.9);
+  box-shadow: 0 0 5px rgba(164,247,41,0.48);
+  flex-shrink: 0;
+}
+
+@media (max-width: 767px) {
+  .hardtech-trust-wrap {
+    padding-top: 6px;
+  }
+
+  .hardtech-trust-wrap::after {
+    display: none;
+  }
+
+  .hardtech-trust-card {
+    min-width: 0;
+    border-radius: 16px;
+    padding: 10px 12px;
+    gap: 9px;
+    box-shadow: 0 9px 22px rgba(12,12,12,0.06), 0 1px 4px rgba(12,12,12,0.025), inset 0 1px 0 rgba(255,255,255,0.96);
+  }
+
+  .hardtech-trust-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .hardtech-trust-copy strong {
+    font-size: 12px;
+    white-space: normal;
+  }
+}
+
+/* Performance profile for constrained devices */
+.page-mobile-optimized .acrylic-panel-bg-1,
+.page-mobile-optimized .acrylic-panel-bg-2 {
+  opacity: 0.6;
+}
+
+@media (max-width: 1024px), (prefers-reduced-motion: reduce) {
+  .hardtech-noise-layer {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hardtech-trust-track {
+    animation: none !important;
+  }
+}
+
